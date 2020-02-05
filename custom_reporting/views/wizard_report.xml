@@ -1,0 +1,43 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="commit_report_wizard_form">
+            <field name="name">commit.report.wizard.form</field>
+            <field name="model">commit.report.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Commitment Order Report">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="from_date"/>
+<!--                                <field name="st_type"/>-->
+                                <field name="category_ids" widget="many2many_tags" string="Category"/>
+<!--                                <field name="commit_ids" widget="many2many_tags" string="Commitment Order"-->
+<!--                                       attrs="{'invisible': [('st_type', '!=', 'commit_order')]}"/>-->
+                                <field name="partner_ids" widget="many2many_tags" string="Customers"/>
+                            </group>
+                            <group>
+                                <field name="to_date"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button string="Print"
+                                type="action" class="btn-primary" name="%(report_commitment_order_xlsx_id1)d"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="commit_report_wizard_action">
+            <field name="name">commit.report.wizard.form</field>
+            <field name="res_model">commit.report.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Reporting" id="menu_commit_report_wizard_menu"
+                  parent="commitment_order.commitment_order_menu_root"
+                  action="custom_reporting.commit_report_wizard_action"/>
+    </data>
+</odoo>

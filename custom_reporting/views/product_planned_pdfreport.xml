@@ -1,0 +1,164 @@
+<odoo>
+    <data>
+        <report
+                id="action_report_saleordercopp"
+                string="Print to PDF"
+                model="production.planned"
+                report_type="qweb-pdf"
+                file="custom_reporting.report_saleordercopp"
+                name="custom_reporting.report_saleordercopp"
+                menu="False"
+        />
+
+        <template id="report_saleordercopp_document">
+            <t t-call="web.external_layout">
+                <!--                <t t-set="doc" t-value="doc.with_context(lang=doc.partner_id.lang)"/>-->
+
+                <div class="page">
+                    <div class="oe_structure"/>
+
+                    <table style="border: 1px solid black;width: 50%">
+                        <tbody>
+                            <tr>
+                                <td style="border: 1px solid black;" colspan="3">
+                                    <t t-esc="res_company.name"/>
+                                </td>
+                                <!--                                <td>&nbsp;</td>-->
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black;">
+                                    <t t-esc="'Delivery Report Date'"/>
+                                </td>
+                                <td style="border: 1px solid black;" colspan="2">
+                                    <t t-esc="datetime.datetime.now().strftime('%Y-%m-%d')"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black;">
+                                    <t t-esc="'Vehicle Number'"/>
+                                </td>
+                                <td style="border: 1px solid black;" colspan="2">
+                                    <t t-esc="doc.vechile_no.license_plate"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black;">
+                                    <t t-esc="'Driver Name'"/>
+                                </td>
+                                <td style="border: 1px solid black;" colspan="2">
+                                    <t t-esc="doc.vechile_no.driver_id.name"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table style="border: 1px solid black;width: 100%">
+                        <tbody>
+                            <tr>
+                                <td colspan="3">
+                                    <t t-esc="'Gate Pass'"/>
+                                </td>
+                                <!--                                <td>&nbsp;</td>-->
+                            </tr>
+                            <tr>
+                                <td>
+                                    <t t-esc="'Sr. No.'"/>
+                                </td>
+                                <td>
+                                    <t t-esc="'Category'"/>
+                                </td>
+                                <td>
+                                    <t t-esc="'UOM'"/>
+                                </td>
+                                <td>
+                                    <t t-esc="'Qty'"/>
+                                </td>
+                            </tr>
+                            <t t-foreach="doc.get_data_gate_pass_pdf()" t-as="x">
+                                <tr>
+                                    <td>
+                                        <t t-esc="x.get('categ_id_seq')"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="x.get('categ_id')"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="x.get('uom_id')"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="x.get('qty')"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <t t-raw="doc.get_pp_data1()"/>
+
+<!--                    <table>-->
+<!--                        <tbody>-->
+<!--                            <tr>-->
+<!--                                <td colspan="5">-->
+<!--                                    <t t-esc="'Detail Delivery Report'"/>-->
+<!--                                </td>-->
+<!--                                &lt;!&ndash;                                <td>&nbsp;</td>&ndash;&gt;-->
+<!--                            </tr>-->
+<!--                            <tr>-->
+<!--                                <td>-->
+<!--                                    <t t-esc="'Customer Name'"/>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <t t-esc="'Uday'"/>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--&lt;!&ndash;                                    <t t-esc="'UOM'"/>&ndash;&gt;-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <t t-esc="Commitment Order No"/>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                    <t t-esc="Commitment Order No"/>-->
+<!--                                </td>-->
+<!--                            </tr>-->
+<!--                            <t t-foreach="doc.product_detail_ids" t-as="x">-->
+<!--                                <tr>-->
+<!--                                    <td>-->
+<!--                                        <t t-esc="doc.name"/>-->
+<!--                                    </td>-->
+<!--                                    <td>-->
+<!--                                        <t t-esc="x.product_name_id.categ_id.name"/>-->
+<!--                                    </td>-->
+<!--                                    <td>-->
+<!--                                        <t t-esc="x.product_name_id.uom_id.name"/>-->
+<!--                                    </td>-->
+<!--                                </tr>-->
+<!--                            </t>-->
+<!--                        </tbody>-->
+<!--                    </table>-->
+
+                    <table style="margin-top:15px; border: 1px solid black;width: 80%">
+                        <tr>
+                            <td style="border: 1px solid black; height: 50px"></td>
+                            <td style="border: 1px solid black; height: 50px"></td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black;">Printed user: <t t-esc="request.env.user.name"/></td>
+                            <td style="border: 1px solid black;">Delivry mangar  Name</td>
+                        </tr>
+                    </table>
+                </div>
+            </t>
+        </template>
+
+        <template id="report_saleordercopp">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="custom_reporting.report_saleordercopp_document" />
+                </t>
+            </t>
+        </template>
+
+        <template id="gate_pass_report">
+            <t t-call="custom_reporting.report_saleordercopp"/>
+            <t t-call="custom_reporting.ppvcommitment_order_xlsx"/>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,38 @@
+<odoo>
+    <data>
+        <record id="sequence_self_service" model="ir.sequence">
+            <field name="name">Commit Sequence</field>
+            <field name="code">commit.sequence</field>
+            <field name="prefix">CO-</field>
+            <field name="padding">6</field>
+        </record>
+
+        <record id="production_planning_service" model="ir.sequence">
+            <field name="name">Production Planning Sequence</field>
+            <field name="code">production.planning.sequence</field>
+            <field name="prefix">PPV-</field>
+            <field name="padding">6</field>
+        </record>
+
+        <record id="product_category_commit_seq" model="ir.sequence">
+            <field name="name">Product Category Sequence</field>
+            <field name="code">product.category.commit.seq</field>
+            <field name="prefix">CC-</field>
+            <field name="padding">3</field>
+        </record>
+
+        <record id="product_product_commit_seq" model="ir.sequence">
+            <field name="name">Product Product Sequence</field>
+            <field name="code">product.product.commit.seq</field>
+<!--            <field name="prefix">0</field>-->
+            <field name="padding">3</field>
+        </record>
+
+        <record id="uom_uom_commit_seq" model="ir.sequence">
+            <field name="name">UOM Sequence</field>
+            <field name="code">uom.uom.commit.seq</field>
+            <field name="prefix">UOM-</field>
+            <field name="padding">4</field>
+        </record>
+    </data>
+</odoo>

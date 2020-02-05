@@ -1,0 +1,217 @@
+<odoo>
+    <data>
+        <!-- Form View-->
+
+        <record model="ir.ui.view" id="production_planned_form">
+            <field name="name">productionplanned Form</field>
+            <field name="model">production.planned</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="validate_pp_delivery" string="Validate Delivery" type="object"/>
+                        <button name="create_pp_invoice" string="Create Invoice" type="object"/>
+
+                        <button name="tfprint_to_PDF" string="Print to PDF" type="object"/>
+                        <button name="tfprint_to_XLSX" string="Print to XLSX" type="object"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="create_gate_pass"
+                                    string="Create Gate Pass" type="object"/>
+                            <button name="Product_Details" string="Product Details" type="object" icon="fa-bars"/>
+                            <button name="Delivery_Details" string="Delivery Details" type="object" icon="fa-bars"/>
+                            <button name="Invoice_Details" string="Invoice Details" type="object" icon="fa-bars"/>
+                            <button name="Validate_invoice" string="Validate Invoice" type="object" icon="fa-bars"/>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="name" readonly="1"/>
+                                <field name="create_uid"/>
+                                <!--                        </group>-->
+                                <!--                        <group col="4">-->
+                                <field name="create_date" readonly="1"/>
+                                <field name="attachment_ids" widget="many2many_tags"/>
+                            </group>
+                            <group>
+                                <field name="write_date" readonly="1"/>
+                                <!--                        </group>-->
+                                <!--                        <group col="4">-->
+                                <field name="vechile_no"/>
+                                <field name="vehicle_id"/>
+                            </group>
+                        </group>
+                        <notebook>
+
+                            <page string="Sale order Details">
+                                <field name="sale_order_line_ids">
+                                    <tree editable="bottom">
+                                        <field name="sale_order_no"/>
+                                        <field name="partner_id"/>
+                                        <field name="city"/>
+                                        <field name="total_qty"/>
+                                    </tree>
+                                </field>
+                                <group class="oe_subtotal_footer oe_right">
+                                    <field name="sale_order_line_total" string="Total Quantity"/>
+                                </group>
+                            </page>
+
+                            <!--                            <page string="Product Details">-->
+                            <!--                                <field name="product_detail_ids">-->
+                            <!--                                    <tree editable="bottom">-->
+                            <!--                                        <field name="product_name_id"/>-->
+                            <!--                                        <field name="qty"/>-->
+                            <!--                                        <field name="delivery_qty"/>-->
+                            <!--                                    </tree>-->
+                            <!--                                </field>-->
+                            <!--                                <group class="oe_subtotal_footer oe_right">-->
+                            <!--                                    <field name="product_detail_total" string="Total Quantity"/>-->
+                            <!--                                </group>-->
+                            <!--                            </page>-->
+
+                            <!--                            <page string="Delivery Details">-->
+                            <!--                                <field name="delivery_order_ids">-->
+                            <!--                                    <tree editable="bottom">-->
+                            <!--                                                                    <field name="delivery_id"/>-->
+                            <!--                                                                    <field name="partner_id"/>-->
+                            <!--                                                                    <field name="city"/>-->
+                            <!--                                                                    <field name="total_demanded"/>-->
+                            <!--                                                                    <field name="total_done"/>-->
+
+                            <!--                                        &lt;!&ndash;                                        <field name="product_name_id"/>&ndash;&gt;-->
+                            <!--                                        &lt;!&ndash;                                        <field name="qty"/>&ndash;&gt;-->
+                            <!--                                    </tree>-->
+                            <!--                                </field>-->
+                            <!--                                <group class="oe_subtotal_footer oe_right">-->
+                            <!--                                    <field name="delivery_order_total" string="Total Quantity"/>-->
+                            <!--                                </group>-->
+                            <!--                            </page>-->
+                            <!--                            <page string="Invoice Details">-->
+                            <!--                                <field name="invoice_line_ids">-->
+                            <!--                                    <tree editable="bottom">-->
+                            <!--                                                                    <field name="invoice_id"/>-->
+                            <!--                                                                    <field name="partner_id"/>-->
+                            <!--                                                                    <field name="city"/>-->
+                            <!--                                                                    <field name="total_qty"/>-->
+                            <!--                                                                    <field name="total_amount_tax"/>-->
+                            <!--                                                                    <field name="total_amount_total"/>-->
+                            <!--                                                                    <field name="total_amount_untaxed"/>-->
+                            <!--                                                                    <field name="total_amount_residual"/>-->
+                            <!--                                    </tree>-->
+                            <!--                                </field>-->
+                            <!--                            </page>-->
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!--  Tree/Form View-->
+
+        <record model="ir.ui.view" id="production_planned_tree">
+            <field name="name">productidef action_confirm(onplanned Tree</field>
+            <field name="model">production.planned</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="create_uid"/>
+                    <field name="create_date"/>
+                    <field name="write_date"/>
+                    <field name="vechile_no" invisible="1"/>
+
+                </tree>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="production_planned_action_window">
+            <field name="name">ProductionPlanned Window</field>
+            <field name="res_model">production.planned</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <menuitem name="Production Planning" id="production_planned_menu_root"/>
+
+
+        <menuitem name="Production Planned" id="production_planned_menu_1" parent="production_planned_menu_root"/>
+
+
+        <menuitem name="Production Planned" id="production_planned_list" parent="production_planned_menu_root"
+                  action="production_planned_action_window"/>
+
+
+        <!--        product_details-->
+
+        <record model="ir.ui.view" id="production_planned_tree11">
+            <field name="name">productidef action_confirm(onplanned Tree</field>
+            <field name="model">product.details</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="product_name_id"/>
+                    <field name="qty"/>
+                    <field name="delivery_qty"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="production_planned_action_window11">
+            <field name="name">ProductionPlanned Window</field>
+            <field name="res_model">product.details</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!--        delivery details-->
+        <record model="ir.ui.view" id="production_planned_tree121">
+            <field name="name">productidef action_confirm(onplanned Tree</field>
+            <field name="model">delivery.order.stock</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="delivery_id"/>
+                    <field name="partner_id"/>
+                    <field name="city"/>
+                    <field name="total_demanded"/>
+                    <field name="total_done"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="production_planned_action_window121">
+            <field name="name">ProductionPlanned Window</field>
+            <field name="res_model">delivery.order.stock</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!--        invoice details-->
+        <record model="ir.ui.view" id="production_planned_tree131">
+            <field name="name">productidef action_confirm(onplanned Tree</field>
+            <field name="model">pp.account.invoice</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="invoice_id"/>
+                    <field name="partner_id"/>
+                    <field name="city"/>
+                    <field name="total_qty"/>
+                    <field name="total_amount_tax"/>
+                    <field name="total_amount_total"/>
+                    <field name="total_amount_untaxed"/>
+                    <field name="total_amount_residual"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="production_planned_action_window131">
+            <field name="name">ProductionPlanned Window</field>
+            <field name="res_model">pp.account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,24 @@
+<odoo>
+    <data>
+        <report
+                id="report_commitment_order_xlsx_id1"
+                model="commit.report.wizard"
+                string="Print to XLSX"
+                report_type="xlsx"
+                name="custom_reporting.commitment_order_xlsx"
+                file="custom_reporting.commitment_order_xlsx"
+                attachment_use="False"
+                menu="True"
+        />
+        <report
+                id="report_commitment_order_xlsx_id"
+                model="production.planned"
+                string="Print to XLSX"
+                report_type="xlsx"
+                name="custom_reporting.ppvcommitment_order_xlsx"
+                file="custom_reporting.ppvcommitment_order_xlsx"
+                attachment_use="False"
+                menu="False"
+        />
+    </data>
+</odoo>

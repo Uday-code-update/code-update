@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+	<data>
+		<menuitem name="MRP Creation" 
+			id="mrp_creation_root"/>
+
+
+		<menuitem name="MRP Creation"
+			id="mrp_Creation_menu"
+			parent="mrp_creation.mrp_creation_root"
+			action="mrp_creation.mrp_creation_action_window"
+			sequence="1"/>
+	</data>
+</odoo>

@@ -1,0 +1,82 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="sale_order_popup_form">
+            <field name="name">commitmentorder Form</field>
+            <field name="model">sale.order.transient</field>
+            <field name="arch" type="xml">
+                <form string="Sale Order">
+                    <sheet>
+                        <group>
+                            <field name="line_ids">
+                                <tree editable="bottom">
+                                    <field name="product_id" required="1"/>
+                                    <field name="qty" string="Quantity"/>
+                                    <field name="price_without_tax" string="Without tax" readonly="1"/>
+                                    <field name="price" string="Price" readonly="1"/>
+                                    <field name="total" string="Total" readonly="1"/>
+                                </tree>
+                            </field>
+                            <field name="action_commitment"/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button string="Submit"
+                            name="create_sale_order" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="sale_order_popup_action">
+            <field name="name">commitmentorder window</field>
+            <field name="res_model">sale.order.transient</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+        </record>
+
+
+        <record model="ir.ui.view" id="sale_order_popup_form1">
+            <field name="name">commitmentorder Form</field>
+            <field name="model">sale.order.transient.new</field>
+            <field name="arch" type="xml">
+                <form string="Sale Order">
+                    <sheet>
+                        <group>
+                            <field name="partner_id" string="Customer"/>
+                            <field name="line_ids">
+                                <tree editable="bottom">
+                                    <field name="product_id" required="1"/>
+                                    <field name="qty" string="Quantity"/>
+<!--                                    <field name="price_without_tax" string="Without tax" readonly="1"/>-->
+<!--                                    <field name="price" string="Price" readonly="1"/>-->
+<!--                                    <field name="total" string="Total" readonly="1"/>-->
+                                </tree>
+                            </field>
+<!--                            <field name="action_commitment"/>-->
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button string="Submit"
+                            name="create_sale_order" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="sale_order_popup_action1">
+            <field name="name">commitmentorder window</field>
+            <field name="res_model">sale.order.transient.new</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Commitment Order Popup" id="menu_product_price_list_COPOP" parent="commitment_order.menu_setting_list"
+                  action="sale_order_popup_action1"/>
+
+        <menuitem name="Commitment Order Popup" id="menu_product_price_list_COPOP1" parent="sale.sale_order_menu"
+                  action="sale_order_popup_action1"/>
+    </data>
+</odoo>

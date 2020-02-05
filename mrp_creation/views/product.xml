@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    
+    <record model="ir.ui.view" id="product_template_form_view_inherit">
+      <field name="name">Tagged Products</field>
+      <field name="model">product.template</field>
+      <field name="inherit_id" ref="product.product_template_form_view"/>
+      <field name="arch" type="xml">
+        <xpath expr="//page[@name='notes']" position = "after">
+          <page name = "tagged_products" string="Tagged Products">
+            <field name="tagged_product_line_ids">
+              <tree string="Tagged Products" editable="bottom">
+                <field name="product_id"/>
+              </tree>
+            </field>
+          </page>
+        </xpath>
+      </field>
+    </record>
+  </data>
+</odoo>

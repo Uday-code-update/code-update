@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    
+    <record model="ir.ui.view" id="mrp_creation_list_view">
+      <field name="name">MRP Creation View</field>
+      <field name="model">product.mrp_creation</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="user_created"/>
+          <field name="date_of_update"/>
+          <field name="price_list"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="mrp_creation_form_view">
+      <field name="name">MRP Creation View</field>
+      <field name="model">product.mrp_creation</field>
+      <field name="arch" type="xml">
+        <form>
+          <header>
+            <button name="button_update"
+              type="object"
+              string="Update Record"
+              />
+
+          </header>
+          <sheet>
+            <div class="oe_title">
+              <h1>
+                  <field name="name" readonly="1"/>
+              </h1>
+            </div>
+            <group>
+              <group>
+                <field name="user_created"/>
+              </group>
+              <group>
+                <field name="date_of_update"/>
+                <field name="price_list"/>
+              </group>
+            </group>
+            <notebook>
+              <page string="product MRP Details">
+                <field name="mrp_details_line_ids">
+                  <tree editable="bottom">
+                    <field name="product"/>
+                    <field name="tag1_product" force_save="1"/>
+                    <field name="tag1_product_mrp"/>
+                    <field name="tag2_product" force_save="1"/>
+                    <field name="tag2_product_mrp"/>
+                    <field name="product_price" force_save="1"/>
+                    <field name="mrp"/>
+                  </tree>
+                </field>
+              </page>
+              <page string="User Update Details">
+                <field name="user_update_line_ids">
+                  <tree editable="bottom">
+                    <field name="user"/>
+                    <field name="updated_date"/>
+                    <field name="tag1_product"/>
+                    <field name="tag1_product_old_mrp"/>
+                    <field name="tag1_product_new_mrp"/>
+                    <field name="tag2_product"/>
+                    <field name="tag2_product_old_mrp"/>
+                    <field name="tag2_product_new_mrp"/>
+                    <field name="product_price"/>
+                    <field name="old_mrp"/>
+                    <field name="new_mrp"/>
+                  </tree>
+                </field>
+              </page>
+            </notebook>
+
+          </sheet>
+        </form>
+      </field>
+    </record>
+    
+
+    <!-- actions opening views on models -->
+    
+    <record model="ir.actions.act_window" id="mrp_creation_action_window">
+      <field name="name">MRP Creation Window</field>
+      <field name="res_model">product.mrp_creation</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    
+
+    <!-- server action to the one above -->
+    <!--
+    <record model="ir.actions.server" id="mrp_creation.action_server">
+      <field name="name">mrp_creation server</field>
+      <field name="model_id" ref="model_mrp_creation_mrp_creation"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": self._name,
+        }
+      </field>
+    </record>
+    -->
+
+    <!-- Top menu item -->
+    <!--
+    <menuitem name="mrp_creation" id="mrp_creation.menu_root"/>
+    -->
+    <!-- menu categories -->
+    <!--
+    <menuitem name="Menu 1" id="mrp_creation.menu_1" parent="mrp_creation.menu_root"/>
+    <menuitem name="Menu 2" id="mrp_creation.menu_2" parent="mrp_creation.menu_root"/>
+    -->
+    <!-- actions -->
+    <!--
+    <menuitem name="List" id="mrp_creation.menu_1_list" parent="mrp_creation.menu_1"
+              action="mrp_creation.action_window"/>
+    <menuitem name="Server to list" id="mrp_creation" parent="mrp_creation.menu_2"
+              action="mrp_creation.action_server"/>
+    -->
+  </data>
+</odoo>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    
+    <record model="ir.ui.view" id="date_update_wizard">
+      <field name="name">Data Update</field>
+      <field name="model">mrp_creation.update</field>
+      <field name="arch" type="xml">
+        <form>
+          <field name="mrp_creation_number"/>
+          <field name="update_ids">
+            <tree editable="bottom">
+              <field name="product"/>
+              <field name="tag1_product" force_save="1"/>
+              <field name="tag1_product_mrp"/>
+              <field name="tag1_product_new_mrp"/>
+              <field name="tag2_product" force_save="1"/>
+              <field name="tag2_product_mrp"/>
+              <field name="tag2_product_new_mrp"/>
+              <field name="product_price" force_save="1"/>
+              <field name="mrp"/>
+              <field name="new_mrp"/>
+            </tree>
+          </field>
+          <footer>
+            <button name="update" string="Update" type="object" class="oe_highlight"/>
+           or
+            <button string="Cancel" class="oe_link" special="cancel"/>
+        </footer>
+        </form>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="data_update_action_window">
+        <field name="name">Data Update</field>
+        <field name="res_model">mrp_creation.update</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+  </data>
+</odoo>

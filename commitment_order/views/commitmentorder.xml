@@ -1,0 +1,209 @@
+<odoo>
+    <data>
+        <!-- Form View-->
+
+        <record model="ir.ui.view" id="commitment_order_form">
+            <field name="name">commitmentorder Form</field>
+            <field name="model">commitment.order</field>
+            <field name="arch" type="xml">
+                <form delete="false">
+
+                    <header>
+                        <button name="cancel_commit_order" string="Cancel" type="object" class="oe_highlight"
+                        attrs="{'invisible': [('state', 'not in', ['commitment_order'])]}"/>
+                        <button name="confirm_commit_order" string="Confirm" type="object" class="oe_highlight"
+                        attrs="{'invisible': [('state', 'not in', ['cancel'])]}"/>
+                        <!--                    <button name="merge_table" string="Merge table" type="object"/>-->
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="cancel,draft,commitment_order,order_running,completed"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="preview_commitment_order"
+                                    type="object"
+                                    class="oe_stat_button"
+                                    icon="fa-globe icon">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_text">Customer</span>
+                                    <span class="o_stat_text">Preview</span>
+                                </div>
+                            </button>
+                            <button name="total_sale_order"
+                                    string="Total Sale Order" type="object" icon="fa-bars"/>
+                            <button name="total_invoice_orders"
+                                    string="Total invoice orders" type="object" icon="fa-bars"/>
+                            <button name="total_delivery_orders"
+                                    string="Total delivery Orders" type="object" icon="fa-bars"/>
+                            <button name="sale_order_form"
+                                    string="Create Sale Order" type="object" icon="fa-bars"/>
+                            <!--                            <button name="merge_table"-->
+                            <!--                                    string="Merge table" type="action" icon="fa-bars"/>-->
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <!--                                <field name="id" invisible="1"/>-->
+                                <!--                                <field name="name" invisible="[('id', '!=', False)]" readonly="1"/>-->
+                                <field name="partner_id" required="1"
+                                       attrs="{'readonly': [('state', 'in', ['order_running','completed'])]}"/>
+                            </group>
+                            <group>
+                                <field name="user_id"
+                                       attrs="{'readonly': [('state', 'in', ['order_running','completed'])]}"/>
+                                <field name="price_list_id" required="1"
+                                       attrs="{'readonly': [('state', 'in', ['order_running','completed'])]}"/>
+                                <field name="create_date" readonly="1"/>
+                                <field name="write_date" readonly="1"/>
+                                <field name="expiry_date"
+                                       attrs="{'readonly': [('state', 'in', ['order_running','completed'])]}"/>
+                                <field name="create_uid"
+                                       attrs="{'readonly': [('state', 'in', ['order_running','completed'])]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Order Book">
+                                <field name="order_line_ids"
+                                       attrs="{'readonly': [('state', 'in', ['order_running','completed'])]}">
+                                    <tree editable="bottom">
+                                        <field name="category_ids"
+                                               context="{'commitment_categorys': 'commitment_categorys'}"/>
+                                        <field name="ordered_qty"/>
+                                        <field name="booked_qty"/>
+                                        <field name="delivery_qty"/>
+                                        <field name="remaining_qty"/>
+                                        <field name="sales_order_qty" readonly="1"/>
+                                    </tree>
+                                    <form>
+                                        <sheet>
+                                            <group>
+                                                <group>
+                                                    <field name="category_ids"/>
+                                                    <field name="ordered_qty"/>
+                                                    <field name="booked_qty"/>
+                                                </group>
+                                                <group>
+                                                    <field name="remaining_qty"/>
+                                                    <field name="delivery_qty"/>
+                                                </group>
+                                            </group>
+                                        </sheet>
+                                    </form>
+                                </field>
+
+                            </page>
+                            <page string="Converted Sale Book">
+                                <field name="sale_line_ids" readonly="1">
+                                    <tree editable="bottom">
+                                        <field name="name" readonly="1"/>
+                                        <field name="sale_id" readonly="1"/>
+                                        <field name="ordered_qty" readonly="1"/>
+                                        <field name="adjusted_qty"/>
+                                        <field name="adjusted_commitment_order_id"/>
+                                        <!--                                        <field name="booked_qty" readonly="1"/>-->
+                                        <field name="delivery_qty" readonly="1"/>
+                                        <field name="remaining_qty" readonly="1"/>
+                                        <field name="status"/>
+                                    </tree>
+                                    <form>
+                                        <sheet>
+                                            <group>
+                                                <group>
+                                                    <field name="commit_id"/>
+                                                    <field name="sale_id"/>
+                                                    <field name="booked_qty"/>
+                                                    <field name="delivery_qty"/>
+                                                </group>
+                                                <group>
+                                                    <field name="name"/>
+                                                    <field name="ordered_qty"/>
+                                                    <field name="remaining_qty"/>
+                                                    <field name="adjusted_qty"/>
+                                                </group>
+                                            </group>
+                                            <group>
+                                                <field name="adjusted_commitment_order_id">
+                                                    <tree>
+                                                        <field name="name"/>
+                                                        <field name="ordered_qty" string="Adjusted Qty"/>
+                                                    </tree>
+                                                </field>
+                                            </group>
+                                            <group>
+                                                <field name="status"/>
+                                            </group>
+                                        </sheet>
+                                    </form>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <!--  Tree/Form View-->
+        <record model="ir.ui.view" id="commitment_order_tree">
+            <field name="name">commitmentorder Tree</field>
+            <field name="model">commitment.order</field>
+            <field name="arch" type="xml">
+                <tree delete="false">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="create_date" readonly="1"/>
+                    <field name="write_date" readonly="1"/>
+                    <field name="user_id"/>
+                    <field name="ordered_qty"/>
+                    <field name="booked_qty"/>
+                    <field name="remaining_qty"/>
+                    <field name="delivery_qty"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="commitment_order_action_window">
+            <field name="name">Commitment Order</field>
+            <field name="res_model">commitment.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <menuitem name="Commitment Order" id="commitment_order_menu_root"/>
+
+
+        <menuitem name="Order" id="commitment_order_menu_1" parent="commitment_order_menu_root"/>
+
+
+        <menuitem name="Commitment Order" id="menu_1_list" parent="commitment_order_menu_root"
+                  action="commitment_order_action_window"/>
+
+        <menuitem name="Settings" id="menu_setting_list" parent="commitment_order_menu_root"/>
+        <menuitem name="Product Category" id="menu_product_category_list" parent="menu_setting_list"
+                  action="product.product_category_action_form"/>
+        <menuitem name="Product" id="menu_product_list" parent="menu_setting_list"
+                  action="stock.product_template_action_product"/>
+        <menuitem name="Pricelists" id="menu_product_price_list" parent="menu_setting_list"
+                  action="product.product_pricelist_action2"/>
+
+        <!--        <template id="portal_my_home_commitment" name="Portal My Home : Commitment entry" inherit_id="portal.portal_my_home"-->
+        <!--                  priority="1">-->
+        <!--            <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">-->
+        <!--                <t t-if="commit_count" t-call="portal.portal_docs_entry">-->
+        <!--                    <t t-set="title">Commitment Orders</t>-->
+        <!--                    <t t-set="url" t-value="'/my/commit/orders'"/>-->
+        <!--                    <t t-set="count" t-value="commit_count"/>-->
+        <!--                </t>-->
+        <!--            </xpath>-->
+        <!--        </template>-->
+    </data>
+</odoo>

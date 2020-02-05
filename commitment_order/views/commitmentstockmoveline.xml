@@ -1,0 +1,32 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="commitment_stock_move_line_tree">
+            <field name="name">commitmentstockmoveline Tree</field>
+            <field name="model">commitment.stock.move.line</field>
+            <field name="arch" type="xml">
+                <!--                <field name="line_ids">-->
+                <tree>
+                    <field name="name"/>
+                    <field name="product_id"/>
+                    <field name="category_id"/>
+                    <field name="purchase_id"/>
+                    <field name="commitment_id"/>
+                    <field name="partner_id"/>
+<!--                    <field name="state"/>-->
+                    <field name="qty"/>
+                </tree>
+                <!--            </field>-->
+            </field>
+        </record>
+
+
+        <record id="commitment_stock_move_line" model="ir.actions.act_window">
+            <field name="name">Commitment Stock</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">commitment.stock.move.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+    </data>
+</odoo>
