@@ -47,15 +47,58 @@ class Conveyers(models.Model):
 				workorders[-1].next_work_order_id = workorder.id
 			workorders += workorder
 
-			# assign moves; last operation receive all unassigned moves (which case ?)
-			moves_raw = self.move_raw_ids.filtered(lambda move: move.operation_id == operation)
-			if len(workorders) == len(bom.routing_id.operation_ids):
-				moves_raw |= self.move_raw_ids.filtered(lambda move: not move.operation_id)
-			moves_finished = self.move_finished_ids.filtered(lambda move: move.operation_id == operation) #TODO: code does nothing, unless maybe by_products?
-			moves_raw.mapped('move_line_ids').write({'workorder_id': workorder.id})
-			(moves_finished + moves_raw).write({'workorder_id': workorder.id})
 
-			workorder._generate_lot_ids()
+			# assign moves; last operation receive all unassigned moves (which case ?)
+			# move_raw = []
+			for bom_line in bom.bom_line_ids:
+				for operation_id in bom_line.new_operation_id:
+					for x in self.move_raw_ids:
+						if operation_id == operation:
+							moves_raw = x
+								# moves_raw |= self.move_raw_ids.filtered(lambda move: not move.operation_id)
+							# moves_finished = self.move_finished_ids.filtered(lambda move: move.operation_id == operation) #TODO: code does nothing, unless maybe by_products?
+							# moves_raw.mapped('move_line_ids').write({'workorder_id': workorder.id})
+							# (moves_finished + moves_raw).write({'workorder_id': workorder.id})
+							# print(moves_raw.workorder_id,">>>>>>>>>>>>>>>>>>>>>>")
+							MoveLine = self.env['stock.move.line']
+							tracked_moves = self.move_raw_ids.filtered(
+								lambda move: move.state not in ('done', 'cancel') and move.product_id.tracking != 'none' and move.product_id != workorder.product_id and move.bom_line_id)
+							for move in tracked_moves:
+								qty = move.unit_factor * workorder.qty_producing
+								if move.product_id.tracking == 'serial':
+									while float_compare(qty, 0.0, precision_rounding=move.product_uom.rounding) > 0:
+										if not MoveLine.search([('product_id','=',x.product_id.id),('move_id','=', move.id)]):
+											MoveLine.create({
+												'move_id': move.id,
+												'product_uom_qty': 0,
+												'product_uom_id': move.product_uom.id,
+												'qty_done': min(1, qty),
+												'production_id': workorder.production_id.id,
+												'workorder_id': workorder.id,
+												'product_id': move.product_id.id,
+												'done_wo': False,
+												'location_id': move.location_id.id,
+												'location_dest_id': move.location_dest_id.id,
+											})
+											qty -= 1
+								else:
+									if not MoveLine.search([('product_id','=',x.product_id.id),('move_id','=', move.id)]):
+										MoveLine.create({
+											'move_id': move.id,
+											'product_uom_qty': 0,
+											'product_uom_id': move.product_uom.id,
+											'qty_done': qty,
+											'product_id': move.product_id.id,
+											'production_id': workorder.production_id.id,
+											'workorder_id': workorder.id,
+											'done_wo': False,
+											'location_id': move.location_id.id,
+											'location_dest_id': move.location_dest_id.id,
+											})
+
+			# MoveLine = self.env['stock.move.line']
+			# for x in workorder.active_move_line_ids:
+			# 	.unlink()
 		return workorders
 
 
@@ -75,10 +118,10 @@ class Conveyers(models.Model):
 		self.write({'state': 'done', 'date_finished': fields.Datetime.now()})
 		return self.write({'state': 'done'})
 
-# class MrpBomOperation(models.Model):
-# 	_inherit = 'mrp.bom'
+class MrpBomOperation(models.Model):
+	_inherit = 'mrp.bom.line'
 
 
-# 	new_operation_id = fields.Many2many('mrp.routing.workcenter',string= 'Consumed in Operation',
-# 		help="The operation where the components are consumed, or the finished products created.")
+	new_operation_id = fields.Many2many('mrp.routing.workcenter',string= 'Consumed in Operation',
+		help="The operation where the components are consumed, or the finished products created.")
 

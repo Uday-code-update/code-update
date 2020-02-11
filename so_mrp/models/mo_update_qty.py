@@ -12,8 +12,45 @@ class mrp(models.Model):
 	_inherit = 'mrp.workorder'
 
 
-	qty_production1 = fields.Float('Originallllll Production Quantity')
+	qty_production1 = fields.Float('Original Production Quantity')
 
+
+	def _generate_lot_ids(self):
+		""" Generate stock move lines """
+		self.ensure_one()
+		MoveLine = self.env['stock.move.line']
+		tracked_moves = self.move_raw_ids.filtered(
+			lambda move: move.state not in ('done', 'cancel') and move.product_id.tracking != 'none' and move.product_id != self.production_id.product_id and move.bom_line_id)
+		for move in tracked_moves:
+			qty = move.unit_factor * self.qty_producing
+			if move.product_id.tracking == 'serial':
+				while float_compare(qty, 0.0, precision_rounding=move.product_uom.rounding) > 0:
+					MoveLine.create({
+						'move_id': move.id,
+						'product_uom_qty': 0,
+						'product_uom_id': move.product_uom.id,
+						'qty_done': min(1, qty),
+						'production_id': self.production_id.id,
+						'workorder_id': self.id,
+						'product_id': move.product_id.id,
+						'done_wo': False,
+						'location_id': move.location_id.id,
+						'location_dest_id': move.location_dest_id.id,
+					})
+					qty -= 1
+			else:
+				MoveLine.create({
+					'move_id': move.id,
+					'product_uom_qty': 0,
+					'product_uom_id': move.product_uom.id,
+					'qty_done': qty,
+					'product_id': move.product_id.id,
+					'production_id': self.production_id.id,
+					'workorder_id': self.id,
+					'done_wo': False,
+					'location_id': move.location_id.id,
+					'location_dest_id': move.location_dest_id.id,
+					})
 
 	@api.multi
 	def record_production(self):
