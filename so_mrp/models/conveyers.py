@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from collections import defaultdict
 import math
+from collections import defaultdict
 
 from odoo import api, fields, models, _
 from odoo.addons import decimal_precision as dp
