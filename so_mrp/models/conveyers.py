@@ -67,35 +67,41 @@ class Conveyers(models.Model):
 								qty = move.unit_factor * workorder.qty_producing
 								if move.product_id.tracking == 'serial':
 									while float_compare(qty, 0.0, precision_rounding=move.product_uom.rounding) > 0:
-										if not MoveLine.search([('product_id','=',x.product_id.id),('move_id','=', move.id)]):
-											MoveLine.create({
-												'move_id': move.id,
-												'product_uom_qty': 0,
-												'product_uom_id': move.product_uom.id,
-												'qty_done': min(1, qty),
-												'production_id': workorder.production_id.id,
-												'workorder_id': workorder.id,
-												'product_id': move.product_id.id,
-												'done_wo': False,
-												'location_id': move.location_id.id,
-												'location_dest_id': move.location_dest_id.id,
-											})
-											qty -= 1
-								else:
-									if not MoveLine.search([('product_id','=',x.product_id.id),('move_id','=', move.id)]):
+										# if not MoveLine.search([('product_id','=',x.product_id.id),('move_id','=', move.id)]):
 										MoveLine.create({
 											'move_id': move.id,
 											'product_uom_qty': 0,
 											'product_uom_id': move.product_uom.id,
-											'qty_done': qty,
-											'product_id': move.product_id.id,
+											'qty_done': min(1, qty),
 											'production_id': workorder.production_id.id,
 											'workorder_id': workorder.id,
+											'product_id': move.product_id.id,
 											'done_wo': False,
 											'location_id': move.location_id.id,
 											'location_dest_id': move.location_dest_id.id,
-											})
+										})
+										qty -= 1
+								else:
+									# for x in workorder.active_move_line_ids:
+									# 	if x.product_id == move.product_id:
+									# 		pass	
+									MoveLine.create({
+										'move_id': move.id,
+										'product_uom_qty': 0,
+										'product_uom_id': move.product_uom.id,
+										'qty_done': qty,
+										'product_id': move.product_id.id,
+										'production_id': workorder.production_id.id,
+										'workorder_id': workorder.id,
+										'done_wo': False,
+										'location_id': move.location_id.id,
+										'location_dest_id': move.location_dest_id.id,
+										})
 
+			
+
+
+			# MoveLine.search([('product_id','=',x.product_id.id),('move_id','=', move.id)]).unlink()
 			# MoveLine = self.env['stock.move.line']
 			# for x in workorder.active_move_line_ids:
 			# 	.unlink()

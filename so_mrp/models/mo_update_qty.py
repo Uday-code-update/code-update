@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from datetime import datetime
+from datetime import datetime,date
 from dateutil.relativedelta import relativedelta
 
 from odoo import api, fields, models, _
@@ -209,13 +209,14 @@ class MOCreation(models.Model):
 			date_planned = datetime.strptime(mo.date_planned_start,'%Y-%m-%d %H:%M:%S').date()
 			if date_planned == date.today():
 				mo.product_qty += product_qty
-				mo.move_raw_ids.product_uom_qty = bom.bom_line_ids.product_qty*mo.product_qty/bom.product_qty
-				
-				stock = self.env['stock.quant'].search([('product_id','=',product_id.id)])
-				for x in stock:
-					if x.quantity>0.0:
-						if product_qty > x.quantity:
-							mo.product_qty = mo.product_qty+(product_qty - x.quantity)
+				for line in mo.move_raw_ids:
+					line.move_raw_ids.product_uom_qty = bom.bom_line_ids.product_qty*line.product_qty/bom.product_qty
+					
+					stock = self.env['stock.quant'].search([('product_id','=',product_id.id)])
+					for x in stock:
+						if x.quantity>0.0:
+							if product_qty > x.quantity:
+								line.product_qty = line.product_qty+(product_qty - x.quantity)
 			else:
 				production = ProductionSudo.create(self._prepare_mo_vals(product_id, product_qty, product_uom, location_id, name, origin, values, bom))
 				origin_production = values.get('move_dest_ids') and values['move_dest_ids'][0].raw_material_production_id or False
