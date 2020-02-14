@@ -22,7 +22,7 @@ class mrp(models.Model):
 		tracked_moves = self.move_raw_ids.filtered(
 			lambda move: move.state not in ('done', 'cancel') and move.product_id.tracking != 'none' and move.product_id != self.production_id.product_id and move.bom_line_id)
 		for move in tracked_moves:
-			qty = move.unit_factor * self.qty_producing
+			qty = move.unit_factor * self.qty_produced
 			if move.product_id.tracking == 'serial':
 				while float_compare(qty, 0.0, precision_rounding=move.product_uom.rounding) > 0:
 					MoveLine.create({
@@ -143,7 +143,7 @@ class mrp(models.Model):
 						self.env['stock.move.line'].create(values)
 
 		# Update workorder quantity produced
-		self.qty_produced += self.qty_production1
+		self.qty_produced = self.qty_production1
 
 		if self.final_lot_id:
 			self.final_lot_id.use_next_on_work_order_id = self.next_work_order_id
@@ -166,14 +166,15 @@ class mrp(models.Model):
 
 		if self.qty_produced == self.qty_production1:
 			self.button_finish()
+		# else:
+		# 	raise UserError(_("Quantity Not Produced totally or current qty is not zero"))
 		return True
 
 	# @api.multi
 	# def action_confirm(self):
 	# 	if self._get_forbidden_state_confirm() & set(self.mapped('state')):
 	# 		raise UserError(_(
-	# 			'It is not allowed to confirm an order in the following states: %s'
-	# 		) % (', '.join(self._get_forbidden_state_confirm())))
+	# 			'It is not allowed to confirm an order in the following states: %s) % (', '.join(self._get_forbidden_state_confirm())))
 	# 	self._action_confirm()
 	# 	if self.env['ir.config_parameter'].sudo().get_param('sale.auto_done_setting'):
 	# 		self.action_done()
